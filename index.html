@@ -11,6 +11,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap" rel="stylesheet">
+
+
     <link rel="stylesheet" href="./index.css">
 </head>
 
@@ -141,6 +143,9 @@
         </div>
     </div>
 
+
+
+
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
         integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
         crossorigin="anonymous"></script>
@@ -155,6 +160,8 @@
             const date = new Date(timestamp * 1000); 
             return date.toLocaleString();
         }
+
+
         async function fetchAQIData(lat, lon) {
             let fetchAQIData = await fetch(`http://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=d28274b5fe592e1f1e558103a5e66370`)
             let formattedData = await fetchAQIData.json();
@@ -183,6 +190,8 @@
                 const data = await response.json();
 
                 let dailyForecasts = {};
+
+                
                 data.list.forEach(item => {
                     let date = item.dt_txt.split(" ")[0]; 
                     if (!dailyForecasts[date]) {
@@ -193,6 +202,8 @@
                         };
                     }
                 });
+
+                
                 let forecastHtml = "";
                 Object.keys(dailyForecasts).slice(0, 5).forEach(date => {
                     let forecast = dailyForecasts[date];
@@ -229,7 +240,6 @@
                 let todayDate = new Date().toISOString().split("T")[0]; 
                 let todayForecasts = data.list.filter(item => item.dt_txt.startsWith(todayDate)); 
 
-                
                 let selectedHours = todayForecasts.slice(0, 6); 
 
                 let todayHtml = "";
@@ -273,19 +283,28 @@
             $("#pressure")[0].innerText=formattedData.main.pressure
             $("#feelsLike")[0].innerText=formattedData.main.feels_like
             $("#visiblity")[0].innerText=formattedData.visibility
+
+
+            
             let properDate = dateFormat(formattedData.dt);
             let date = properDate.split(',')[0]
             let time = properDate.split(',')[1]
             $("#date")[0].innerText = date;
             $("#time")[0].innerText = time
+
+     
             let sunriseTimeStamp = formattedData.sys.sunrise;
             let sunsetTimeStamp = formattedData.sys.sunset;
             let properSunriseTime = dateFormat(sunriseTimeStamp).split(',')[1]
-            let properSunsetTime = dateFormat(sunsetTimeStamp).split(',')[1]
+            let properSunsetTime = dateFormat(sunsetTimeStamp).split(',')[1];
+
             $("#sunriseTime")[0].innerText = properSunriseTime
-            $("#sunsetTime")[0].innerText = properSunsetTim
+            $("#sunsetTime")[0].innerText = properSunsetTime
+
+
             let lat = formattedData.coord.lat;
             let lon = formattedData.coord.lon;
+
             fetchAQIData(lat, lon);
             nextFiveDays(lat, lon);
             todayTemps(lat, lon);
